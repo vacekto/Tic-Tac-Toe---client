@@ -1,0 +1,34 @@
+.victory{
+  color: white;
+  align-self: center;
+  width: 100%;
+  height: 90px;
+  margin-bottom: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+span{
+  font-size: 25px;
+}
+
+.options{
+  width: 100px;
+  height: 30px;
+  cursor: pointer;
+  width: 120px;
+  height: 35px;
+  background  : none;
+  background-color: turquoise;
+  text-decoration: none;
+  color: black;
+  font-size: 18px;
+}
+
+.optionsContainer{
+  width: 100%;
+  display: flex;
+  justify-content: space-evenly;
+}

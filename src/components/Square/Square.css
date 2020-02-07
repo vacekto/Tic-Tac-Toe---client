@@ -1,0 +1,47 @@
+.square{
+  width: var(--cell-size);
+  height: var(--cell-size);
+  border: 0.5px solid rgba(173, 173, 173, 0.267);
+  margin: -0.25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.square.X::before, 
+.square.X::after {
+  content: "";
+  width: calc(var(--mark-size) * .15);
+  height: var(--mark-size);
+  background-color: #9DCBEF;
+  position: absolute;
+  border-radius: 50%;
+}
+
+.square.X::before{
+  transform: rotate(45deg);
+}
+
+.square.X::after{
+  transform: rotate(-45deg);
+}
+
+.square.O::before, 
+.square.O::after {
+  content: "";
+  border-radius: 50%;
+  position: absolute;
+}
+
+.square.O::before{
+  width: var(--mark-size);
+  height: var(--mark-size);
+  background-color: #FCE47C;
+}
+
+.square.O::after{
+  width: calc(var(--mark-size) * .7);
+  height: calc(var(--mark-size) * .7);
+  background-color: #4F5F6E;
+}

@@ -1,0 +1,118 @@
+@import url('https://fonts.googleapis.com/css?family=Chivo&display=swap');
+.menu{
+  background-color: #21284591;
+  height: 600px;
+  width: 320px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 10px;
+}
+
+.headline{
+  height: 35%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+h1{
+  font-family: 'Chivo', sans-serif;
+  font-weight: bold;
+  font-size: 40px; 
+  color: #fff;
+  border-bottom: 3px solid #236EFF;
+  margin-bottom: 40px;
+}
+
+a {
+  text-align: center;
+  padding: 5px;
+}
+
+.menuContainer {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.label{
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding-left: 15px;
+  padding-right: 15px;
+  background-color: #F8D320;
+  font-size: 17px;
+  font-weight: bold;
+}
+
+.gameId{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-self: center;
+  width: 80%;
+  border-top: 3px solid #F8D320;
+  color: #F8D320;
+  display: flex;
+  align-items: center;
+  font-size: 15px;
+  overflow: hidden;
+  height: auto;
+  max-height: 0px;
+  transition: all 0.3s ease-out;
+  margin-bottom: 25px;
+}
+
+.slide{
+  border: none;
+  border-top: 3px solid #F8D320;
+  height: 50px;
+  max-height: 50px;
+  margin-bottom: 0;
+}
+
+.clickable{
+  cursor: pointer;
+  font-weight: bold;
+  background-color: #236EFF ;
+  text-decoration: none;
+  color: #212845;
+  width: 57%;
+  height: 33px;
+  margin: 25px auto;
+  outline: 4px solid #236EFF;
+  font-size: 18px;
+  border: none;
+  transition: all ease-in-out 150ms;
+}
+
+.clickable:active{
+  background-color: #F8D320;
+  transition: linear 0ms;
+
+}
+
+.clickable:hover {
+  outline-offset: 5px;
+  outline: 4px solid #F8D320;
+}
+
+input{
+  color: white;
+  background: none;
+  height: 30px;
+  border: none;
+  border-bottom: 2px solid #F8D320 ;
+  outline: none;
+  width: 80%;
+  margin: auto;
+  font-size: 15px;
+}
+
+.join {
+  margin-top: 0px;
+}
+
