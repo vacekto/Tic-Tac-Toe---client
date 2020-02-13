@@ -1,40 +1,39 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import "./Menu.css"
 import { Link } from "react-router-dom"
 
-
-const Menu = ({menu, history, socket}) => {
+const Menu = ({setMode, history, socket}) => {
   const [input, setInput] = useState("");
   const [gameId, setGameId] = useState(null);
-  const [slide, setSlide] = useState("")
-
+  const [slide, setSlide] = useState("");
 
   const clickCreate = () => {
     setGameId("game id: " + socket.id);
     setSlide("slide");
-    socket.on("startGame", () => {
-      history.push("/newGame");
-    })
-    menu.setState({
-      mode: "host",
-      socket: socket
-    }, () => {
-      socket.emit("createGame");
-    });
-  }
+    socket.emit("createGame");
+  };
 
-  const clickJoin = (id) => {
-    socket.on("startGame", () => {
-      history.push("/newGame");
-    })
-    menu.setState({
-      mode: "guest",
-      socket: socket
-    }, () => {
-      socket.emit("joinGame", id);
-    });
-  }
+  const clickJoin = () => {
+    socket.emit("joinGame", input)
+  };
 
+  useEffect(() => {
+    setMode("hotSeat");
+    socket.once("joinedGame", () => {
+      setMode("guest", () => {
+        history.push("/newGame")
+      });
+    })
+    socket.once("createdGame", () => {
+      setMode("host", () => {
+        history.push("/newGame")
+      });
+    })
+    return () => {
+      socket.removeAllListeners("createGame");
+      socket.removeAllListeners("joineGame");
+    }
+  }, []);
 
   return (
     <div className="menu">
@@ -42,9 +41,6 @@ const Menu = ({menu, history, socket}) => {
         <h1>Tic Tac Toe</h1>  
       </div>
       <div className="menuContainer">
-        <div className="solid">
-
-        </div>
         <div className="label">
           <div>Hot seat</div>
           <div>O</div>
@@ -58,12 +54,13 @@ const Menu = ({menu, history, socket}) => {
           Create game
         </button>
         <div className={`gameId ${slide}`}>{gameId}</div>
-        <button onClick={(e) => {
-          e.preventDefault(); clickJoin(input);}}
+        <button onClick={() => {
+          clickJoin();}}
           className="join clickable">
           Join game
         </button>        
         <input 
+          className="idInput"
           spellCheck="false"
           placeholder="Game id.."
           type="text" 

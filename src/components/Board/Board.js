@@ -3,15 +3,16 @@ import './Board.css';
 import Row from "../Row/Row.js";
 import VictoryPopup from "./popups/VictoryPopup.js";
 import OpponentLeftPopup from "./popups/OpponentLeftPopup.js"
+import Chat from "./Chat/Chat.js"
 import { update } from "./handleClick.js";
 
 const uuidv4 = require('uuid/v4');
 
 class Board extends React.Component {
   state = {
-    squareKeys: new Array(10).fill(null, 0).map((key) => uuidv4()),
-    rowKeys: new Array(10).fill(null, 0).map((key) => uuidv4()),
-    status: new Array(10).fill(new Array(10).fill(null, 0), 0),
+    squareKeys: new Array(12).fill(null, 0).map((key) => uuidv4()),
+    rowKeys: new Array(12).fill(null, 0).map((key) => uuidv4()),
+    status: new Array(12).fill(new Array(12).fill(null, 0), 0),
     isPlaying: "X",
     mode: this.props.mode,
     socket: this.props.socket,
@@ -42,63 +43,61 @@ class Board extends React.Component {
 
   resetBoard = () => {
     this.setState({
-      status: new Array(10).fill(new Array(10).fill(null, 0), 0),
+      status: new Array(12).fill(new Array(12).fill(null, 0), 0),
       isPlaying: "X",
       displayVictoryPopup: false
     })
   }
 
   goToMenu = () => {
-    if (this.state.mode !== "hotSeat") {
-      this.state.socket.emit("opponent left");
-      this.props.menu.setState({mode:"hotSeat"})
-    }
     this.props.history.push("./");
-
   }
-
 
   componentDidMount() {
     const { socket, mode } = this.state;
     if (mode !== "hotSeat") {
-      if (socket.listeners("update")) {
-        socket.on("update", (data) => {
-          const update = JSON.parse(JSON.stringify(this.state.status));
-          update[data[0]][data[1]] = this.state.isPlaying;
-          this.setState((prevState) => {
-            return {
-              status: update,
-              isPlaying: (prevState.isPlaying === "X") ? "O" : "X",
-            }
-          });
-        })
-      }
-
-      if (socket.listeners("opponent won")) {
-        socket.on("opponent won", (data) => {
-          const update = JSON.parse(JSON.stringify(this.state.status));
-          update[data[0]][data[1]] = this.state.isPlaying;
-          this.setState({
+      socket.on("update", (data) => {
+        const update = JSON.parse(JSON.stringify(this.state.status));
+        update[data[0]][data[1]] = this.state.isPlaying;
+        this.setState((prevState) => {
+          return {
             status: update,
-            displayVictoryPopup: true
-          })
-        })
-      }
-
-      if (socket.listeners("opponent left")) {
-        socket.on('opponent left', () => {
-          this.setState({
-            displayOpponentLeftPopup: true,
-          })
+            isPlaying: (prevState.isPlaying === "X") ? "O" : "X",
+          }
         });
-      }
+      })
+
+      socket.on("opponent won", (data) => {
+        const update = JSON.parse(JSON.stringify(this.state.status));
+        update[data[0]][data[1]] = this.state.isPlaying;
+        this.setState({
+          status: update,
+          displayVictoryPopup: true
+        })
+      })
+      
+      socket.once('opponent left', () => {
+        this.setState({
+          displayOpponentLeftPopup: true,
+        })
+      });
     }
+  }
+
+  componentWillUnmount(){
+    const {socket} = this.state;    
+    socket.removeAllListeners("update");
+    socket.removeAllListeners("opponent won");
   }
 
   render() {
     return (
       <div className="boardContainer">
-        <div className="board">
+      {(this.state.displayOpponentLeftPopup) ? (
+          <OpponentLeftPopup className="OpponentLeft"
+            history={this.props.history} />
+        ) : (null)}
+        <div className="victoryContainer">
           {(this.state.displayVictoryPopup) ? (
             <VictoryPopup
               winner={this.state.isPlaying}
@@ -106,30 +105,37 @@ class Board extends React.Component {
               socket={this.state.socket}
               mode={this.state.mode}
               history={this.props.history}
+              board={this}
             />
           ) : (null)}
-          <div className="rows">
-            {this.state.status.map((row, index) => {
-              return <Row
-                row={row}
-                rowIndex={index}
-                handleClick={this.handleClick}
-                squareKeys={this.state.squareKeys}
-                key={this.state.rowKeys[index]}
-              />
-            })}
+        </div>
+        <div className="stuffContainer">
+          <div className="board">
+            <div className="rows">
+              {this.state.status.map((row, index) => {
+                return <Row
+                  row={row}
+                  rowIndex={index}
+                  handleClick={this.handleClick}
+                  squareKeys={this.state.squareKeys}
+                  key={this.state.rowKeys[index]}
+                />
+              })}
+            </div>
+            <div className="panel">
+              <button id="quit" onClick={() => {
+                this.goToMenu();
+                this.state.socket.emit("opponent left");
+                }}>Quit</button>
+              <div>{`Player ${this.state.isPlaying} is playing`}</div>
+            </div>
           </div>
-          <div className="panel">
-            <button onClick={this.goToMenu}>Quit</button>
-            <div>{`Player ${this.state.isPlaying} moves`}</div>
-            <button onClick={this.resetBoard}>Reset</button>
+          <div className="chatContainer">
+            {(this.state.mode === "hotSeat") ? (null) :
+            (<Chat socket={this.state.socket} />)}
           </div>
         </div>
-        {(this.state.displayOpponentLeftPopup) ? (
-          <OpponentLeftPopup className="OpponentLeft"
-            history={this.props.history}
-            goToMenu={this.goToMenu} />
-        ) : (null)}
+
       </div>
     );
   }

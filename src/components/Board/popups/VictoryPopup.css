@@ -1,7 +1,6 @@
 .victory{
   color: white;
   align-self: center;
-  width: 100%;
   height: 90px;
   margin-bottom: 10px;
   display: flex;
@@ -10,25 +9,42 @@
   justify-content: space-evenly;
 }
 
+.victoryContainer{
+  display: flex;
+  height: 110px;
+  padding-top: 5px;
+  width: 100%;
+}
+
 span{
   font-size: 25px;
 }
 
 .options{
-  width: 100px;
-  height: 30px;
   cursor: pointer;
   width: 120px;
   height: 35px;
-  background  : none;
-  background-color: turquoise;
+  background-color: #405060;
   text-decoration: none;
   color: black;
   font-size: 18px;
+  border: none;
+}
+
+.options:hover{
+  color: #236EFF;
 }
 
 .optionsContainer{
   width: 100%;
   display: flex;
   justify-content: space-evenly;
+}
+
+.opponentReady{
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
 }
