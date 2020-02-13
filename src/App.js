@@ -6,12 +6,11 @@ import { BrowserRouter, Route, Switch } from "react-router-dom"
 import io from "socket.io-client"
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 
-//  https://react-tic-tac-toe-magicturtle.herokuapp.com/
 
 class App extends React.Component {
   state = {
     mode: "hotSeat",
-    socket: io("localhost:5000")
+    socket: io("https://react-tic-tac-toe-magicturtle.herokuapp.com/")
   }
 
   setMode = (mode, callback) => {
