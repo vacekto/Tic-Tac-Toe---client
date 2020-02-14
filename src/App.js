@@ -10,7 +10,7 @@ import { CSSTransition, TransitionGroup } from "react-transition-group";
 class App extends React.Component {
   state = {
     mode: "hotSeat",
-    socket: io("http://localhost:5000/")
+    socket: io("https://react-tic-tac-toe-magicturtle.herokuapp.com/")
   }
 
   setMode = (mode, callback) => {
