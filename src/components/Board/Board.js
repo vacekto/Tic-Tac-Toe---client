@@ -79,7 +79,8 @@ class Board extends React.Component {
       socket.on('opponent left', () => {
         this.setState({
           displayOpponentLeftPopup: true,
-        })
+        });
+        socket.emit("leave");
       });
     }
   }

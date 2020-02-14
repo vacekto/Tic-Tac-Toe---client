@@ -33,7 +33,7 @@ const VictoryPopup = ({ winner, socket, resetBoard, mode, board, history }) => {
   }
 
   const leave = () => {
-    socket.emit('opponent left');
+    socket.emit("opponent left");
     history.push("/");
   }
 
