@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react"
 import "./Menu.css"
 import { Link } from "react-router-dom"
 
-const Menu = ({setMode, history, socket}) => {
+const Menu = ({ setMode, history, socket }) => {
   const [input, setInput] = useState("");
   const [gameId, setGameId] = useState(null);
   const [slide, setSlide] = useState("");
@@ -19,12 +19,12 @@ const Menu = ({setMode, history, socket}) => {
 
   useEffect(() => {
     setMode("hotSeat");
-    socket.once("joinedGame", () => {
+    socket.on("joinedGame", () => {
       setMode("guest", () => {
         history.push("/newGame")
       });
     })
-    socket.once("createdGame", () => {
+    socket.on("createdGame", () => {
       setMode("host", () => {
         history.push("/newGame")
       });
@@ -32,13 +32,15 @@ const Menu = ({setMode, history, socket}) => {
     return () => {
       socket.removeAllListeners("createGame");
       socket.removeAllListeners("joineGame");
+      socket.removeAllListeners("createdGame");
+      socket.removeAllListeners("joinedGame");
     }
   }, []);
 
   return (
     <div className="menu">
       <div className="headline">
-        <h1>Tic Tac Toe</h1>  
+        <h1>Tic Tac Toe</h1>
       </div>
       <div className="menuContainer">
         <div className="label">
@@ -50,20 +52,21 @@ const Menu = ({setMode, history, socket}) => {
           <div>Online</div>
           <div>X</div>
         </div>
-        <button className="create clickable" onClick={clickCreate}> 
+        <button className="create clickable" onClick={clickCreate}>
           Create game
         </button>
         <div className={`gameId ${slide}`}>{gameId}</div>
         <button onClick={() => {
-          clickJoin();}}
+          clickJoin();
+        }}
           className="join clickable">
           Join game
-        </button>        
-        <input 
+        </button>
+        <input
           className="idInput"
           spellCheck="false"
           placeholder="Game id.."
-          type="text" 
+          type="text"
           onChange={(e) => setInput(e.target.value)} />
       </div>
     </div>

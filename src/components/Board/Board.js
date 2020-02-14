@@ -76,7 +76,7 @@ class Board extends React.Component {
         })
       })
       
-      socket.once('opponent left', () => {
+      socket.on('opponent left', () => {
         this.setState({
           displayOpponentLeftPopup: true,
         })
@@ -88,6 +88,7 @@ class Board extends React.Component {
     const {socket} = this.state;    
     socket.removeAllListeners("update");
     socket.removeAllListeners("opponent won");
+    socket.removeAllListeners("opponent left");
   }
 
   render() {
